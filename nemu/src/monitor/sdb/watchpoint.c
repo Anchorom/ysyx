@@ -19,12 +19,12 @@
 
 typedef struct watchpoint
 {
-  int NO;
-  struct watchpoint *next;
+	int NO;
+	struct watchpoint *next;
 
-  /* TODO: Add more members if necessary */
-  // char args[32];
-  // word_t result;
+	/* TODO: Add more members if necessary */
+	// char args[32];
+	// word_t result;
 } WP;
 
 static WP wp_pool[NR_WP] = {};
@@ -32,53 +32,53 @@ static WP *head = NULL, *free_ = NULL;
 
 void init_wp_pool()
 {
-  int i;
-  for (i = 0; i < NR_WP; i++)
-  {
-    wp_pool[i].NO = i;
-    wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
-    // wp_pool[i].args = '\0';
-    // wp_pool[i].result = 0;
-  }
+	int i;
+	for (i = 0; i < NR_WP; i++)
+	{
+		wp_pool[i].NO = i;
+		wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
+		// wp_pool[i].args = '\0';
+		// wp_pool[i].result = 0;
+	}
 
-  head = NULL;
-  free_ = wp_pool;
+	head = NULL;
+	free_ = wp_pool;
 }
 
 /* TODO: Implement the functionality of watchpoint */
 // WP *new_wp()
 // {
-//   WP *temp;
-//   if (free_ == NULL)
-//     Assert(0, "无空闲节点"); // 无空闲节点
-//   temp = free_;
-//   free_ = free_->next;
+// 	WP *temp;
+// 	if (free_ == NULL)
+// 		Assert(0, "无空闲节点"); // 无空闲节点
+// 	temp = free_;
+// 	free_ = free_->next;
 
-//   temp->next = head; // 头插法
-//   head = temp;
-//   return temp;
+// 	temp->next = head; // 头插法
+// 	head = temp;
+// 	return temp;
 // }
 
 // void free_wp(WP *wp)
 // {
-//   if (wp == NULL)
-//     Assert(0, "试图free空指针");
-//   head = wp->next;
-//   wp->next = free_;
-//   wp->args = '\0';
-//   wp->result = 0;
-//   free_ = wp;
-//   return;
+// 	if (wp == NULL)
+// 		Assert(0, "试图free空指针");
+// 	head = wp->next;
+// 	wp->next = free_;
+// 	wp->args = '\0';
+// 	wp->result = 0;
+// 	free_ = wp;
+// 	return;
 // }
 
 // void load_print(char *args)
 // {
-//   WP *wp = new_wp();
-//   bool success = false;
-//   strcmp(wp->args, args);
-//   word_t res = expr(wp->args, &success);
-//   if (success)
-//     wp->result = res;
-//   printf("Watch point %d: %s\n", wp->NO, wp->args);
-//   return;
+// 	WP *wp = new_wp();
+// 	bool success = false;
+// 	strcmp(wp->args, args);
+// 	word_t res = expr(wp->args, &success);
+// 	if (success)
+// 		wp->result = res;
+// 	printf("Watch point %d: %s\n", wp->NO, wp->args);
+// 	return;
 // }
