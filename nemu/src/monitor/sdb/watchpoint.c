@@ -46,18 +46,17 @@ void init_wp_pool()
 }
 
 /* TODO: Implement the functionality of watchpoint */
-// WP *new_wp()
-// {
-// 	WP *temp;
-// 	if (free_ == NULL)
-// 		Assert(0, "无空闲节点"); // 无空闲节点
-// 	temp = free_;
-// 	free_ = free_->next;
+WP *new_wp()
+{
+	if (free_ == NULL)
+		Assert(0, "无空闲节点"); // 无空闲节点
+	WP *temp = free_;
+	free_ = free_->next;
 
-// 	temp->next = head; // 头插法
-// 	head = temp;
-// 	return temp;
-// }
+	temp->next = head; // 头插法
+	head = temp;
+	return temp;
+}
 
 // void free_wp(WP *wp)
 // {
@@ -70,6 +69,42 @@ void init_wp_pool()
 // 	free_ = wp;
 // 	return;
 // }
+void free_wp(WP *wp)
+{
+	if (wp == NULL)
+	{
+		Assert(0, "试图free空指针");
+	}
+
+	WP *prev = NULL;
+	WP *curr = head;
+
+	// Find the watchpoint in the list
+	while (curr != NULL)
+	{
+		if (curr == wp)
+		{
+			if (prev == NULL)
+			{
+				head = head->next;
+			}
+			else
+			{
+				prev->next = curr->next;
+			}
+
+			wp->next = free_;
+			free_ = wp;
+			return;
+		}
+
+		prev = curr;
+		curr = curr->next;
+	}
+
+	// Watchpoint not found in the list
+	Assert(0, "试图free不存在于链表中的WP结构体");
+}
 
 // void load_print(char *args)
 // {
