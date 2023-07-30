@@ -1,4 +1,4 @@
-module vsrc(
+module top(
   input a,
   input b,
   output f
