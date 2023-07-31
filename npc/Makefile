@@ -5,6 +5,7 @@ CSRC += $(NPC_HOME)/csrc/**
 VSRC = $(NPC_HOME)/vsrc/**
 MAKE = make
 OBJ_DIR = $(NPC_HOME)/obj_dir
+VCD_DIR = $(NPC_HOME)/vcd
 MKFILE =  $(OBJ_DIR)/Vtop.mk
 MKFLAGS = -C $(OBJ_DIR) -f $(MKFILE)
 BINARY = Vtop
@@ -18,7 +19,8 @@ sim:
 	$(VERILATOR) $(VFLAGS_TRACE) $(CSRC) $(VSRC)
 	$(MAKE) $(MKFLAGS)
 	$(OBJ_DIR)/Vtop
+
 clean:
-	rm -rf $(OBJ_DIR) *.vcd
+	rm -rf $(OBJ_DIR) $(VCD_DIR)/*.vcd
 
 include ../Makefile

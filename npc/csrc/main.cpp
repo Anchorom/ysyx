@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
     VerilatedVcdC *tracep = new VerilatedVcdC;//波形
     top->trace(tracep,3);//深度3
     //mkdir(./vcd);
-    tracep->open("waveform.vcd");//波形文件
+    tracep->open("./vcd/waveform.vcd");//波形文件
 #endif
     while (!contextp->gotFinish()) {
         int a = rand() & 1;
