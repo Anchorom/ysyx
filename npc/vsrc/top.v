@@ -1,7 +1,7 @@
 module top(
-  input a,
-  input b,
-  output f
+  input [1:0] sw,
+  output led
 );
-  assign f = a ^ b;
+
+  assign led = sw[0] ^ sw[1];
 endmodule
