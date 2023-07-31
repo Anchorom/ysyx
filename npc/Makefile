@@ -18,7 +18,7 @@ sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	$(VERILATOR) $(VFLAGS_TRACE) $(CSRC) $(VSRC)
 	$(MAKE) $(MKFLAGS)
-	$(OBJ_DIR)/Vtop
+	$(OBJ_DIR)/$(BINARY)
 
 clean:
 	rm -rf $(OBJ_DIR) $(VCD_DIR)/*.vcd
