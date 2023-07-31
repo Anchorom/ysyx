@@ -1,8 +1,8 @@
 VERILATOR = verilator
 VFLAGS = --cc --exe -Wno-fatal --build
 VFLAGS_TRACE = --cc --exe -Wno-fatal --build --trace
-CSRC += $(NPC_HOME)/csrc/**
-VSRC = $(NPC_HOME)/vsrc/**
+CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
+VSRCS = $(shell find $(abspath ./vsrc) -name "*.v")
 MAKE = make
 OBJ_DIR = $(NPC_HOME)/obj_dir
 VCD_DIR = $(NPC_HOME)/vcd
