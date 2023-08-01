@@ -14,7 +14,7 @@
  ***************************************************************************************/
 
 #include "sdb.h"
-
+#include <debug.h>
 #define NR_WP 32
 
 typedef struct watchpoint
@@ -55,7 +55,7 @@ WP *new_wp()
 
 	temp->next = head; // 头插法
 	head = temp;
-	return temp;
+	return head;
 }
 
 // void free_wp(WP *wp)
