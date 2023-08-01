@@ -35,8 +35,12 @@ void isa_reg_display()
 // 返回名称为name的寄存器的当前值, 并设置success为true; 否则设置success为false
 word_t isa_reg_str2val(const char *name, bool *success)
 {
-
-	if (!strcmp(name, "$0"))
+	if (!strcmp(name, "pc"))
+	{
+		*success = true;
+		return cpu.pc;
+	}
+	else if (!strcmp(name, "$0"))
 	{
 		*success = true;
 		return gpr(0);

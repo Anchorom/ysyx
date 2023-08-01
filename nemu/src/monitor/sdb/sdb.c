@@ -24,7 +24,7 @@ static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
-void load_print(char *args);
+
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char *rl_gets()
 {
@@ -98,7 +98,7 @@ static int cmd_info(char *args)
 			isa_reg_display();
 		else if (op == 'w')
 		{
-			printf("w'info:...\n");
+			print_wp();
 		}
 	}
 	return 0;
@@ -131,6 +131,11 @@ static int cmd_x(char *args)
 
 static int cmd_p(char *args)
 {
+	if (args == NULL)
+	{
+		printf("Need option!\n");
+		return 0;
+	}
 	bool success = true;
 	word_t result = expr(args, &success);
 	if (success)
@@ -138,17 +143,58 @@ static int cmd_p(char *args)
 	return 0;
 };
 
-// static int cmd_w(char *args)
-// {
-// 	char *arg = strtok(NULL, " ");
-// 	load_print(arg);
-// 	return 0;
-// };
+static int cmd_w(char *args)
+{
+	if (args == NULL)
+	{
+		printf("Need option!\n");
+		return 0;
+	}
+	bool success = true;
+	word_t value = expr(args, &success);
+	if (success)
+	{
+		WP *wp = new_wp();
+		if (wp == NULL)
+		{
+			printf("无空闲节点\n");
+			return 0;
+		}
+		strcpy(wp->expr, args);
+		wp->value = value;
+		printf("Successfully add watchpoint NO.[%d] expression:[%s] value:[%d]\n", wp->NO, wp->expr, wp->value);
+	}
+	else
+	{
+		printf("Wrong option!\n");
+	}
 
-// static int cmd_d(char *args)
-// {
-// 	return 0;
-// };
+	return 0;
+};
+
+static int cmd_d(char *args)
+{
+	int No;
+	if (args == NULL)
+	{
+		printf("Need option!\n");
+		return 0;
+	}
+	sscanf(args, "%d", &No);
+	bool success = true;
+	WP *free = find_wp_no(No, &success);
+	if (success)
+	{
+		free_wp(free);
+		printf("Successfully delete watchpoint NO.[%d] expression:[%s] value:[%d]\n", free->NO, free->expr, free->value);
+	}
+	else
+	{
+		printf("non-existent watchpoint!\n");
+	}
+
+	return 0;
+};
 static struct
 {
 	const char *name;
@@ -162,8 +208,8 @@ static struct
 	{"info", "输出程序状态:info r", cmd_info},
 	{"x", "扫描内存:x N EXPR", cmd_x},
 	{"p", "表达式求值:p EXPR", cmd_p},
-	//{"w", "添加监视点,值变化时暂停:w EXPR", cmd_w},
-	//{"d","删除监视点:d N",cmd_d},
+	{"w", "添加监视点,值变化时暂停:w EXPR", cmd_w},
+	{"d", "删除监视点:d N", cmd_d},
 
 	/* TODO: Add more commands */
 

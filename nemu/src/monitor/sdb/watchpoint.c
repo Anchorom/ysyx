@@ -17,18 +17,8 @@
 #include <debug.h>
 #define NR_WP 32
 
-typedef struct watchpoint
-{
-	int NO;
-	struct watchpoint *next;
-
-	/* TODO: Add more members if necessary */
-	// char args[32];
-	// word_t result;
-} WP;
-
-static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
+static WP wp_pool[NR_WP] = {};
 
 void init_wp_pool()
 {
@@ -49,7 +39,11 @@ void init_wp_pool()
 WP *new_wp()
 {
 	if (free_ == NULL)
-		Assert(0, "无空闲节点"); // 无空闲节点
+	{
+		// Assert(0, "无空闲节点"); // 无空闲节点
+		// printf("无空闲节点\n");
+		return NULL;
+	}
 	WP *temp = free_;
 	free_ = free_->next;
 
@@ -60,21 +54,21 @@ WP *new_wp()
 
 // void free_wp(WP *wp)
 // {
-// 	if (wp == NULL)
-// 		Assert(0, "试图free空指针");
+// 	// if (wp == NULL)
+// 	// 	Assert(0, "试图free空指针");
 // 	head = wp->next;
 // 	wp->next = free_;
-// 	wp->args = '\0';
-// 	wp->result = 0;
 // 	free_ = wp;
 // 	return;
 // }
 void free_wp(WP *wp)
 {
-	if (wp == NULL)
-	{
-		Assert(0, "试图free空指针");
-	}
+	// if (wp == NULL)
+	// {
+	// 	printf("试图free空指针\n");
+	// 	return;
+	// 	// Assert(0, "试图free空指针");
+	// }
 
 	WP *prev = NULL;
 	WP *curr = head;
@@ -103,17 +97,38 @@ void free_wp(WP *wp)
 	}
 
 	// Watchpoint not found in the list
-	Assert(0, "试图free不存在于链表中的WP结构体");
+	// Assert(0, "试图free不存在于链表中的WP结构体");
 }
 
-// void load_print(char *args)
-// {
-// 	WP *wp = new_wp();
-// 	bool success = false;
-// 	strcmp(wp->args, args);
-// 	word_t res = expr(wp->args, &success);
-// 	if (success)
-// 		wp->result = res;
-// 	printf("Watch point %d: %s\n", wp->NO, wp->args);
-// 	return;
-// }
+void print_wp()
+{
+	WP *temp = head;
+	if (temp == NULL)
+	{
+		printf("No watchpoints\n");
+	}
+	while (temp != NULL)
+	{
+		printf("Watch point [%d]: [%s] value:[%d]\n", temp->NO, temp->expr, temp->value);
+		temp = temp->next;
+	}
+}
+
+WP *find_wp_no(int no, bool *success)
+{
+	WP *temp = head;
+	while (temp != NULL && temp->NO != no)
+	{
+		temp = temp->next;
+	}
+	if (temp == NULL)
+	{
+		*success = false;
+	}
+	return temp;
+}
+
+WP *wp_head()
+{
+	return head;
+}

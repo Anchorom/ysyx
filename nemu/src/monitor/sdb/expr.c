@@ -102,7 +102,7 @@ typedef struct token
 static Token tokens[Tokens_Size] __attribute__((used)) = {};
 static int nr_token __attribute__((used)) = 0;
 
-static bool make_token(char *e)
+static bool make_token(char *arg)
 {
 	int position = 0;
 	int i;
@@ -115,14 +115,14 @@ static bool make_token(char *e)
 		memset(tokens[j].str, '\0', 32); // 新表达式清空tokens
 	}
 
-	while (e[position] != '\0')
+	while (arg[position] != '\0')
 	{
 		/* Try all rules one by one. */
 		for (i = 0; i < NR_REGEX; i++)
 		{
-			if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0)
+			if (regexec(&re[i], arg + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0)
 			{
-				char *substr_start = e + position;
+				char *substr_start = arg + position;
 				int substr_len = pmatch.rm_eo;
 
 				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
@@ -194,19 +194,19 @@ static bool make_token(char *e)
 					if (substr_len > 32) // str缓冲区溢出
 						Assert(0, "str缓冲区溢出");
 					tokens[nr_token].type = TK_NUM;
-					strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
+					strncpy(tokens[nr_token].str, &arg[position - substr_len], substr_len);
 					nr_token++;
 					break;
 				case TK_HEX:
 					if (substr_len > 32) // str缓冲区溢出
 						Assert(0, "str缓冲区溢出");
 					tokens[nr_token].type = TK_HEX;
-					strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
+					strncpy(tokens[nr_token].str, &arg[position - substr_len], substr_len);
 					nr_token++;
 					break;
 				case TK_REG:
 					tokens[nr_token].type = TK_REG;
-					strncpy(tokens[nr_token].str, &e[position - substr_len], substr_len);
+					strncpy(tokens[nr_token].str, &arg[position - substr_len], substr_len);
 					nr_token++;
 					break;
 				default:
@@ -218,7 +218,7 @@ static bool make_token(char *e)
 
 		if (i == NR_REGEX)
 		{
-			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+			printf("no match at position %d\n%s\n%*.s^\n", position, arg, position, "");
 			return false;
 		}
 	}
@@ -398,9 +398,9 @@ static word_t eval(int left, int right)
 	return 0;
 }
 
-word_t expr(char *e, bool *success)
+word_t expr(char *arg, bool *success) // bool需传入true,失败赋为false
 {
-	if (!make_token(e))
+	if (!make_token(arg))
 	{
 		*success = false;
 		return 0;
