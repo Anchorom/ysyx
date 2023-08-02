@@ -201,7 +201,7 @@ static struct
 	const char *description;
 	int (*handler)(char *);
 } cmd_table[] = {
-	{"help", "Display information about all supported commands", cmd_help},
+	{"h", "Display information about all supported commands", cmd_help},
 	{"c", "Continue the execution of the program", cmd_c},
 	{"q", "Exit NEMU", cmd_q},
 	{"si", "单步执行:si N", cmd_si},
