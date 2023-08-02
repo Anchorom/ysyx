@@ -126,6 +126,9 @@ endmenu
 
 menu "Testing and Debugging"
 
+config WATCHPOINT
+  bool "enable watchpoint for debug"
+  default 0
 
 config TRACE
   bool "Enable tracer"
@@ -150,7 +153,6 @@ config ITRACE_COND
   depends on ITRACE
   string "Only trace instructions when the condition is true"
   default "true"
-
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF
